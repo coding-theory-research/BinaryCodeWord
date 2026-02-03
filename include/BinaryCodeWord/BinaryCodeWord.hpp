@@ -1,43 +1,62 @@
 #ifndef BINARY_CODE_WORD_HPP
 #define BINARY_CODE_WORD_HPP
 
+#include <cstdint>
 #include <cstddef>
 #include <memory>
+#include <ostream>
 #include <stdexcept>
 
 class BinaryCodeWord {
 public:
-    // Construct a binary codeword of given length, initialized to zeros.
     explicit BinaryCodeWord(int length);
 
-    // Rule of 5 (needed because we manage a dynamic int[])
+    // Rule of 5
     BinaryCodeWord(const BinaryCodeWord& other);
     BinaryCodeWord(BinaryCodeWord&& other) noexcept;
     BinaryCodeWord& operator=(const BinaryCodeWord& other);
     BinaryCodeWord& operator=(BinaryCodeWord&& other) noexcept;
     ~BinaryCodeWord() = default;
 
-    // Accessors
     int length() const noexcept { return m_length; }
 
-    // Set/get a bit at position [0, length-1]. Values are normalized to {0,1}.
     void setBit(int position, int value);
-    int getBit(int position) const;
+    int  getBit(int position) const;
 
-    // Component-wise XOR
-    friend BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b);
+    bool isZero() const noexcept;
+
+    // XOR
+    friend BinaryCodeWord operator+(const BinaryCodeWord& a,
+                                    const BinaryCodeWord& b);
     BinaryCodeWord& operator+=(const BinaryCodeWord& rhs);
 
     // Equality
     bool operator==(const BinaryCodeWord& rhs) const noexcept;
-    bool operator!=(const BinaryCodeWord& rhs) const noexcept { return !(*this == rhs); }
+    bool operator!=(const BinaryCodeWord& rhs) const noexcept {
+        return !(*this == rhs);
+    }
+
+    // Printing
+    friend std::ostream& operator<<(std::ostream& os,
+                                    const BinaryCodeWord& w);
 
 private:
+    using word_t = std::uint64_t;
+    static constexpr int WORD_BITS = 8 * sizeof(word_t);
+
     int m_length{0};
-    std::unique_ptr<int[]> m_bits;
+    int m_numWords{0};
+    std::unique_ptr<word_t[]> m_words;
+
+    static int computeNumWords(int bits) noexcept {
+        return (bits + WORD_BITS - 1) / WORD_BITS;
+    }
+
+    void maskUnusedBits() noexcept;
 
     void requireValidLength(int length) const;
     void requireValidPosition(int position) const;
 };
+
 
 #endif // BINARY_CODE_WORD_HPP

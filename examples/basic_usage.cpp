@@ -11,7 +11,11 @@ int main() {
     b.setBit(3, 1);
     b.setBit(4, 1);
 
+    std::cout << "Codeword a : "<<a<<std::endl;
+    std::cout << "Codeword b : "<<b<<std::endl;
     BinaryCodeWord c = a + b;   // XOR
+    std::cout<<"c = a + b"<<std::endl;
+    std::cout << "Codeword c : "<<c<<std::endl;
     a += b;                     // in-place XOR (great for repeated XOR operations)
 
     std::cout << "c bits: ";

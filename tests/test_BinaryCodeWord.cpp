@@ -63,3 +63,56 @@ TEST(BinaryCodeWord, LengthMismatchThrows) {
     EXPECT_THROW((void)(a + b), std::invalid_argument);
     EXPECT_THROW(a += b, std::invalid_argument);
 }
+
+TEST(BinaryCodeWord, PositionOutOfBoundsThrows) {
+    BinaryCodeWord w(3);
+    EXPECT_THROW(w.setBit(-1, 1), std::out_of_range);
+    EXPECT_THROW(w.setBit(3, 1), std::out_of_range);
+    EXPECT_THROW(w.getBit(-1), std::out_of_range);
+    EXPECT_THROW(w.getBit(3), std::out_of_range);
+}
+
+TEST(BinaryCodeWord, CopyConstructor) {
+    BinaryCodeWord a(4);
+    a.setBit(1, 1);
+    BinaryCodeWord b = a; // copy constructor
+    EXPECT_EQ(b.length(), 4);
+    EXPECT_EQ(b.getBit(1), 1);
+    EXPECT_EQ(b.getBit(0), 0);
+}
+
+TEST(BinaryCodeWord, MoveConstructor) {
+    BinaryCodeWord a(4);
+    a.setBit(2, 1);
+    BinaryCodeWord b = std::move(a); // move constructor
+    EXPECT_EQ(b.length(), 4);
+    EXPECT_EQ(b.getBit(2), 1);
+}
+
+TEST(BinaryCodeWord, CopyAssignment) {
+    BinaryCodeWord a(4);
+    a.setBit(0, 1);
+    BinaryCodeWord b(4);
+    b = a; // copy assignment
+    EXPECT_EQ(b.length(), 4);
+    EXPECT_EQ(b.getBit(0), 1);
+    EXPECT_EQ(b.getBit(1), 0);
+}
+
+TEST(BinaryCodeWord, MoveAssignment) {
+    BinaryCodeWord a(4);
+    a.setBit(3, 1);
+    BinaryCodeWord b(4);
+    b = std::move(a); // move assignment
+    EXPECT_EQ(b.length(), 4);
+    EXPECT_EQ(b.getBit(3), 1);
+}
+
+TEST(BinaryCodeWord, OutputStream) {
+    BinaryCodeWord w(3);
+    w.setBit(0, 1);
+    w.setBit(2, 1);
+    std::ostringstream oss;
+    oss << w;
+    EXPECT_EQ(oss.str(), "(101)");
+}
