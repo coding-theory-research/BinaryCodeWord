@@ -1,0 +1,2 @@
+add_executable(bcw_example_basic basic_usage.cpp)
+target_link_libraries(bcw_example_basic PRIVATE BinaryCodeWord::BinaryCodeWord)
