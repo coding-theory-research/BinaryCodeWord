@@ -116,3 +116,53 @@ TEST(BinaryCodeWord, OutputStream) {
     oss << w;
     EXPECT_EQ(oss.str(), "(101)");
 }
+
+TEST(BinaryCodeWord, IsZero) {
+    BinaryCodeWord w(3);
+    EXPECT_TRUE(w.isZero());
+    w.setBit(1, 1);
+    EXPECT_FALSE(w.isZero());
+    w.setBit(1, 0);
+    EXPECT_TRUE(w.isZero());
+}
+
+TEST(BinaryCodeWord, Reset) {
+    BinaryCodeWord w(3);
+    w.setBit(0, 1);
+    w.reset(5);
+    EXPECT_EQ(w.length(), 5);
+    for (int i = 0; i < w.length(); ++i) {
+        EXPECT_EQ(w.getBit(i), 0);
+    }
+}
+
+TEST(BinaryCodeWord, UninitializedThrows) {
+    BinaryCodeWord w;
+    EXPECT_THROW(w.getBit(0), std::runtime_error);
+    EXPECT_THROW(w.setBit(0, 1), std::runtime_error);
+    EXPECT_THROW(w.isZero(), std::runtime_error);
+    // EXPECT_THROW((void)(w + w), std::runtime_error);
+    // EXPECT_THROW(w += w, std::runtime_error);
+    // // EXPECT_THROW(w == w, std::runtime_error);
+    // std::ostringstream oss;
+    // EXPECT_THROW(oss << w, std::runtime_error);
+}
+
+TEST(BinaryCodeWord, LargeCodeWord) {
+    const int length = 1000;
+    BinaryCodeWord w(length);
+    for (int i = 0; i < length; i += 2) {
+        w.setBit(i, 1);
+    }
+    for (int i = 0; i < length; ++i) {
+        EXPECT_EQ(w.getBit(i), (i % 2 == 0) ? 1 : 0);
+    }
+}
+
+TEST(BinaryCodeWord, DefaultConstructor) {
+    BinaryCodeWord w;
+    EXPECT_FALSE(w.initialized());
+    EXPECT_THROW(w.getBit(0), std::runtime_error);
+    EXPECT_THROW(w.setBit(0, 1), std::runtime_error);
+    EXPECT_THROW(w.isZero(), std::runtime_error);
+}

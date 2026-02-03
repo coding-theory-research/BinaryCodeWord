@@ -1,14 +1,17 @@
-#ifndef BINARY_CODE_WORD_HPP
-#define BINARY_CODE_WORD_HPP
+#pragma once
 
 #include <cstdint>
 #include <cstddef>
 #include <memory>
 #include <ostream>
-#include <stdexcept>
 
 class BinaryCodeWord {
 public:
+    // Default constructor: uninitialized (length == 0, no storage).
+    // Any bit/arith operation should throw until reset(length) is called.
+    BinaryCodeWord() noexcept = default;
+
+    // Construct initialized codeword of given length (all zeros)
     explicit BinaryCodeWord(int length);
 
     // Rule of 5
@@ -18,27 +21,30 @@ public:
     BinaryCodeWord& operator=(BinaryCodeWord&& other) noexcept;
     ~BinaryCodeWord() = default;
 
-    int length() const noexcept { return m_length; }
+    // (Re)initialize this object to the given length (all zeros).
+    // If already initialized, this discards previous contents.
+    void reset(int length);
+
+    bool initialized() const noexcept { return m_length > 0 && m_words != nullptr; }
+    void verifyInitialized() const;
+    int  length() const noexcept { return m_length; }
 
     void setBit(int position, int value);
     int  getBit(int position) const;
 
-    bool isZero() const noexcept;
+    // True iff all coordinates are 0 (throws if uninitialized)
+    bool isZero() const;
 
     // XOR
-    friend BinaryCodeWord operator+(const BinaryCodeWord& a,
-                                    const BinaryCodeWord& b);
+    friend BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b);
     BinaryCodeWord& operator+=(const BinaryCodeWord& rhs);
 
     // Equality
-    bool operator==(const BinaryCodeWord& rhs) const noexcept;
-    bool operator!=(const BinaryCodeWord& rhs) const noexcept {
-        return !(*this == rhs);
-    }
+    bool operator==(const BinaryCodeWord& rhs) const;
+    bool operator!=(const BinaryCodeWord& rhs) const { return !(*this == rhs); }
 
-    // Printing
-    friend std::ostream& operator<<(std::ostream& os,
-                                    const BinaryCodeWord& w);
+    // Print as "(0101...)" using bit order 0..length-1
+    friend std::ostream& operator<<(std::ostream& os, const BinaryCodeWord& w);
 
 private:
     using word_t = std::uint64_t;
@@ -52,11 +58,10 @@ private:
         return (bits + WORD_BITS - 1) / WORD_BITS;
     }
 
-    void maskUnusedBits() noexcept;
-
     void requireValidLength(int length) const;
+    void requireSized() const;
     void requireValidPosition(int position) const;
+
+    // Mask off unused bits in last word (keeps equality/isZero stable)
+    void maskUnusedBits() noexcept;
 };
-
-
-#endif // BINARY_CODE_WORD_HPP
