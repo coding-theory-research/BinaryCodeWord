@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BINARY_CODE_WORD_HPP
+#define BINARY_CODE_WORD_HPP
 
 #include <cstddef>
 #include <memory>
@@ -38,3 +39,5 @@ private:
     void requireValidLength(int length) const;
     void requireValidPosition(int position) const;
 };
+
+#endif // BINARY_CODE_WORD_HPP

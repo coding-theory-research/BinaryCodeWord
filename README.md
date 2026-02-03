@@ -33,7 +33,7 @@ include(FetchContent)
 
 FetchContent_Declare(
   BinaryCodeWord
-  GIT_REPOSITORY https://github.com/<you>/BinaryCodeWord.git
+  GIT_REPOSITORY https://github.com/coding-theory-research/BinaryCodeWord.git
   GIT_TAG v0.1.0
 )
 

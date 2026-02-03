@@ -7,6 +7,7 @@ option(BCW_BUILD_EXAMPLES "Build examples" OFF)
 
 add_library(BinaryCodeWord
     src/BinaryCodeWord.cpp
+        include/BinaryCodeWord/detail/ErrorMessages.hpp
 )
 add_library(BinaryCodeWord::BinaryCodeWord ALIAS BinaryCodeWord)
 

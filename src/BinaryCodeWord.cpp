@@ -1,6 +1,7 @@
 #include "BinaryCodeWord/BinaryCodeWord.hpp"
+#include "BinaryCodeWord/detail/ErrorMessages.hpp"
 
-#include <algorithm> // std::copy, std::fill_n
+#include <algorithm> // needed std::copy, std::fill_n
 
 BinaryCodeWord::BinaryCodeWord(int length) {
     requireValidLength(length);
@@ -41,7 +42,6 @@ BinaryCodeWord& BinaryCodeWord::operator=(BinaryCodeWord&& other) noexcept {
 
 void BinaryCodeWord::setBit(int position, int value) {
     requireValidPosition(position);
-    // Normalize to {0,1}. This also makes repeated XORs well-defined.
     m_bits[position] = (value & 1);
 }
 
@@ -52,7 +52,7 @@ int BinaryCodeWord::getBit(int position) const {
 
 BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b) {
     if (a.m_length != b.m_length) {
-        throw std::invalid_argument("BinaryCodeWord::operator+: lengths must match");
+        throw std::invalid_argument(bcw::error::length_mismatch_plus);
     }
     BinaryCodeWord out(a.m_length);
     // Component-wise XOR using integer ^. Supports chaining: ((a+b)+c) etc.
@@ -64,7 +64,7 @@ BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b) {
 
 BinaryCodeWord& BinaryCodeWord::operator+=(const BinaryCodeWord& rhs) {
     if (m_length != rhs.m_length) {
-        throw std::invalid_argument("BinaryCodeWord::operator+=: lengths must match");
+        throw std::invalid_argument(bcw::error::length_mismatch_pluseq);
     }
     // In-place XOR is ideal for multiple XOR operations.
     for (int i = 0; i < m_length; ++i) {
@@ -83,12 +83,12 @@ bool BinaryCodeWord::operator==(const BinaryCodeWord& rhs) const noexcept {
 
 void BinaryCodeWord::requireValidLength(int length) const {
     if (length <= 0) {
-        throw std::invalid_argument("BinaryCodeWord: length must be positive");
+        throw std::invalid_argument(bcw::error::length_nonpositive);
     }
 }
 
 void BinaryCodeWord::requireValidPosition(int position) const {
     if (position < 0 || position >= m_length) {
-        throw std::out_of_range("BinaryCodeWord: position out of range");
+        throw std::out_of_range(bcw::error::position_oob);
     }
 }
