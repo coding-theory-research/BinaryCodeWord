@@ -166,3 +166,15 @@ TEST(BinaryCodeWord, DefaultConstructor) {
     EXPECT_THROW(w.setBit(0, 1), std::runtime_error);
     EXPECT_THROW(w.isZero(), std::runtime_error);
 }
+
+TEST(BinaryCodeWord, SwapBits) {
+    BinaryCodeWord w(4);
+    w.setBit(0, 1);
+    w.setBit(2, 1);
+    w.swap(0, 2);
+    EXPECT_EQ(w.getBit(0), 1);
+    EXPECT_EQ(w.getBit(2), 1);
+    w.swap(0, 1);
+    EXPECT_EQ(w.getBit(0), 0);
+    EXPECT_EQ(w.getBit(1), 1);
+}

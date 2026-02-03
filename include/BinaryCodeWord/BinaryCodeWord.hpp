@@ -34,6 +34,7 @@ public:
 
     // True iff all coordinates are 0 (throws if uninitialized)
     bool isZero() const;
+    void swap(int c1, int c2);
 
     // XOR
     friend BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b);

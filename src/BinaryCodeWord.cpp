@@ -107,6 +107,19 @@ bool BinaryCodeWord::isZero() const {
     return true;
 }
 
+void BinaryCodeWord::swap(int c1, int c2){
+    verifyInitialized();
+    requireSized();
+    requireValidPosition(c1);
+    requireValidPosition(c2);
+    if(c1 == c2) { return; }
+    const int bit1 = getBit(c1);
+    const int bit2 = getBit(c2);
+    setBit(c1, bit2);
+    setBit(c2, bit1);
+}
+
+
 BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b) {
     if (!a.initialized() || !b.initialized()) {
         throw std::runtime_error("BinaryCodeWord::operator+: uninitialized codeword");
