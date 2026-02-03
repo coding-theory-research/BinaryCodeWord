@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(BinaryCodeWord VERSION 0.1.0 LANGUAGES CXX)
+project(BinaryCodeWord VERSION 1.4.0 LANGUAGES CXX)
 
 option(BCW_BUILD_TESTS "Build unit tests" OFF)
 option(BCW_BUILD_EXAMPLES "Build examples" OFF)
