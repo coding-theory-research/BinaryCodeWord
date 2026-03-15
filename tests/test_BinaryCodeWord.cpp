@@ -200,3 +200,26 @@ TEST(BinaryCodeWord, Weight) {
     auto w3 = w + w2; // should have bits 0,1,2,3,4 all set
     EXPECT_EQ(w3.weight(), 5);
 }
+
+TEST(BinaryCodeWord, DotProduct) {
+    BinaryCodeWord a(4), b(4);
+    a.setBit(0, 1);
+    a.setBit(2, 1);
+
+    b.setBit(1, 1);
+    b.setBit(2, 1);
+
+    int dot = a * b; // should be 1 because only bit 2 overlaps
+    EXPECT_EQ(dot, 1);
+
+    BinaryCodeWord c(4);
+    c.setBit(0, 1);
+    c.setBit(2, 1);
+
+    EXPECT_EQ(a*c, 0);
+    EXPECT_EQ(b*c, 1);
+    EXPECT_EQ(c*b, 1);
+    EXPECT_EQ(c*c, 0);
+    EXPECT_EQ(c*a, 0);
+    EXPECT_EQ(b*a, 1);
+}

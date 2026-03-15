@@ -47,6 +47,9 @@ public:
     bool operator==(const BinaryCodeWord& rhs) const;
     bool operator!=(const BinaryCodeWord& rhs) const { return !(*this == rhs); }
 
+    // Dot Product of two codeword overload * operator
+    friend int operator*(const BinaryCodeWord& a, const BinaryCodeWord& b);
+
     // Print as "(0101...)" using bit order 0..length-1
     friend std::ostream& operator<<(std::ostream& os, const BinaryCodeWord& w);
 

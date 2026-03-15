@@ -182,6 +182,24 @@ bool BinaryCodeWord::operator==(const BinaryCodeWord& rhs) const {
     return true;
 }
 
+int operator*(const BinaryCodeWord& a, const BinaryCodeWord& b) {
+    if (!a.initialized() || !b.initialized()) {
+        throw std::runtime_error("BinaryCodeWord::operator*: uninitialized codeword");
+    }
+    a.requireSized();
+    b.requireSized();
+
+    if (a.m_length != b.m_length) {
+        throw std::invalid_argument("BinaryCodeWord::operator*: lengths must match");
+    }
+
+    int dot = 0;
+    for (int i = 0; i < a.m_numWords; ++i) {
+        dot += std::popcount(a.m_words[i] & b.m_words[i]);
+    }
+    return dot % 2;
+}
+
 std::ostream& operator<<(std::ostream& os, const BinaryCodeWord& w) {
     w.verifyInitialized();
     w.requireSized();
