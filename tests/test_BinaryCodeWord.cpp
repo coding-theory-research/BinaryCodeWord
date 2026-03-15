@@ -222,4 +222,8 @@ TEST(BinaryCodeWord, DotProduct) {
     EXPECT_EQ(c*c, 0);
     EXPECT_EQ(c*a, 0);
     EXPECT_EQ(b*a, 1);
+    //Perform a swap and check that the dot product changes accordingly
+    c.swap(0, 1); // now c has bits 1 and 2
+    EXPECT_EQ(c*a, 1); // now c overlaps with a at bit 2
+    EXPECT_EQ(c*b, 0); // now c only overlaps with b at bit 2, but bit 1 is swapped to 0
 }
