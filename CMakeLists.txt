@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(BinaryCodeWord VERSION 1.8.0 LANGUAGES CXX)
+project(BinaryCodeWord VERSION 2.1.0 LANGUAGES CXX)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release RelWithDebInfo MinSizeRel)
+endif()
 
 option(BCW_BUILD_TESTS "Build unit tests" OFF)
 option(BCW_BUILD_EXAMPLES "Build examples" OFF)
@@ -9,6 +14,18 @@ add_library(BinaryCodeWord
     src/BinaryCodeWord.cpp
         include/BinaryCodeWord/detail/ErrorMessages.hpp
 )
+
+# Helpful warnings (kept mild and portable)
+if (MSVC)
+    target_compile_options(BinaryCodeWord PRIVATE /W4)
+    target_compile_options(BinaryCodeWord PRIVATE $<$<CONFIG:Release>:/O2>)
+else()
+    target_compile_options(BinaryCodeWord PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(BinaryCodeWord PRIVATE $<$<CONFIG:Release>:-O3>)
+endif()
+
+
+
 add_library(BinaryCodeWord::BinaryCodeWord ALIAS BinaryCodeWord)
 
 target_compile_features(BinaryCodeWord PUBLIC cxx_std_20)
@@ -19,12 +36,6 @@ target_include_directories(BinaryCodeWord
         $<INSTALL_INTERFACE:include>
 )
 
-# Helpful warnings (kept mild and portable)
-if (MSVC)
-    target_compile_options(BinaryCodeWord PRIVATE /W4)
-else()
-    target_compile_options(BinaryCodeWord PRIVATE -Wall -Wextra -Wpedantic)
-endif()
 
 if(BCW_BUILD_EXAMPLES)
     add_subdirectory(examples)

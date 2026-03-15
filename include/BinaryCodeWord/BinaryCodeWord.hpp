@@ -1,12 +1,34 @@
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
+// #include <cstdint>
+// #include <cstddef>
 #include <memory>
 #include <ostream>
 
 class BinaryCodeWord {
 public:
+
+    class BitRef {
+    public:
+        inline BitRef(BinaryCodeWord& w, int pos) : m_w(w), m_pos(pos) {}
+
+        inline BitRef& operator=(int value) {
+            m_w.setBit(m_pos, value);
+            return *this;
+        }
+
+        inline BitRef& operator=(const BitRef& other) {
+            return (*this = static_cast<int>(other));
+        }
+
+        inline operator int() const {
+            return m_w.getBit(m_pos);
+        }
+
+    private:
+        BinaryCodeWord& m_w;
+        int m_pos;
+    };
     // Default constructor: uninitialized (length == 0, no storage).
     // Any bit/arith operation should throw until reset(length) is called.
     BinaryCodeWord() noexcept = default;
@@ -51,8 +73,12 @@ public:
     friend int operator*(const BinaryCodeWord& a, const BinaryCodeWord& b);
 
     //Use brackets to get/set bit for a coordinate
-    int operator[](int position) const { return getBit(position); }
-    void operator[](int position) { setBit(position, 1); }
+    inline int operator[](int position) const { return getBit(position); }
+    inline BitRef operator[](int position)
+    {
+        requireValidPosition(position);
+        return BitRef(*this, position);
+    }
 
 
     // Print as "(0101...)" using bit order 0..length-1
