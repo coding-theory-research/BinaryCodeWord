@@ -119,6 +119,16 @@ void BinaryCodeWord::swap(int c1, int c2){
     setBit(c2, bit1);
 }
 
+int BinaryCodeWord::weight() const{
+    verifyInitialized();
+    requireSized();
+    int w = 0;
+    for (int i = 0; i < m_numWords; ++i) {
+        w += std::popcount(m_words[i]);
+    }
+    return w;
+}
+
 
 BinaryCodeWord operator+(const BinaryCodeWord& a, const BinaryCodeWord& b) {
     if (!a.initialized() || !b.initialized()) {

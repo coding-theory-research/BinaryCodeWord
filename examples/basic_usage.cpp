@@ -12,7 +12,9 @@ int main() {
     b.setBit(4, 1);
 
     std::cout << "Codeword a : "<<a<<std::endl;
+    std::cout << "Codeword a Hamming weight : "<<a.weight()<<std::endl;
     std::cout << "Codeword b : "<<b<<std::endl;
+    std::cout << "Codeword b Hamming weight : "<<b.weight()<<std::endl;
     BinaryCodeWord c = a + b;   // XOR
     std::cout<<"c = a + b"<<std::endl;
     std::cout << "Codeword c : "<<c<<std::endl;

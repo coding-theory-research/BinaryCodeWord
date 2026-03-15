@@ -169,12 +169,34 @@ TEST(BinaryCodeWord, DefaultConstructor) {
 
 TEST(BinaryCodeWord, SwapBits) {
     BinaryCodeWord w(4);
+    EXPECT_EQ(w.weight(), 0);
     w.setBit(0, 1);
+    EXPECT_EQ(w.weight(), 1);
     w.setBit(2, 1);
+    EXPECT_EQ(w.weight(), 2);
     w.swap(0, 2);
+    EXPECT_EQ(w.weight(), 2);
     EXPECT_EQ(w.getBit(0), 1);
     EXPECT_EQ(w.getBit(2), 1);
     w.swap(0, 1);
+    EXPECT_EQ(w.weight(), 2);
     EXPECT_EQ(w.getBit(0), 0);
     EXPECT_EQ(w.getBit(1), 1);
+    EXPECT_EQ(w.weight(), 2);
+}
+
+TEST(BinaryCodeWord, Weight) {
+    BinaryCodeWord w(5);
+    EXPECT_EQ(w.weight(), 0);
+    w.setBit(1, 1);
+    w.setBit(3, 1);
+    EXPECT_EQ(w.weight(), 2);
+
+    BinaryCodeWord w2(5);
+    w2.setBit(0, 1);
+    w2.setBit(2, 1);
+    w2.setBit(4, 1);
+    EXPECT_EQ(w2.weight(), 3);
+    auto w3 = w + w2; // should have bits 0,1,2,3,4 all set
+    EXPECT_EQ(w3.weight(), 5);
 }

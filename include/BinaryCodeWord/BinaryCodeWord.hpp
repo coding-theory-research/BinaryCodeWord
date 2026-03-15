@@ -32,6 +32,9 @@ public:
     void setBit(int position, int value);
     int  getBit(int position) const;
 
+    //Hamming Weight
+    int weight() const;
+
     // True iff all coordinates are 0 (throws if uninitialized)
     bool isZero() const;
     void swap(int c1, int c2);
