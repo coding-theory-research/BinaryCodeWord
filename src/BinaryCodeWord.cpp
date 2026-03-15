@@ -98,6 +98,7 @@ int BinaryCodeWord::getBit(int position) const {
     return (m_words[w] & mask) ? 1 : 0;
 }
 
+
 bool BinaryCodeWord::isZero() const {
     verifyInitialized();
     requireSized();

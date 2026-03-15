@@ -50,6 +50,11 @@ public:
     // Dot Product of two codeword overload * operator
     friend int operator*(const BinaryCodeWord& a, const BinaryCodeWord& b);
 
+    //Use brackets to get/set bit for a coordinate
+    int operator[](int position) const { return getBit(position); }
+    void operator[](int position) { setBit(position, 1); }
+
+
     // Print as "(0101...)" using bit order 0..length-1
     friend std::ostream& operator<<(std::ostream& os, const BinaryCodeWord& w);
 

@@ -22,18 +22,34 @@ TEST(BinaryCodeWord, SetAndGetBit) {
 
 TEST(BinaryCodeWord, PlusIsXor) {
     BinaryCodeWord a(4), b(4);
+    BinaryCodeWord aa(4), bb(4);
     a.setBit(0, 1);
     a.setBit(2, 1);
+    aa[0] = 1;
+    aa[2] = 1;
 
     b.setBit(2, 1);
     b.setBit(3, 1);
+    bb[2] = 1;
+    bb[3] = 1;
 
     BinaryCodeWord c = a + b;
+    BinaryCodeWord cc = aa + bb;
 
     EXPECT_EQ(c.getBit(0), 1);
     EXPECT_EQ(c.getBit(1), 0);
     EXPECT_EQ(c.getBit(2), 0);
     EXPECT_EQ(c.getBit(3), 1);
+
+    EXPECT_EQ(c[0], 1);
+    EXPECT_EQ(c[1], 0);
+    EXPECT_EQ(c[2], 0);
+    EXPECT_EQ(c[3], 1);
+
+    EXPECT_EQ(cc[0], 1);
+    EXPECT_EQ(cc[1], 0);
+    EXPECT_EQ(cc[2], 0);
+    EXPECT_EQ(cc[3], 1);
 }
 
 TEST(BinaryCodeWord, PlusEqualsChains) {
@@ -70,6 +86,9 @@ TEST(BinaryCodeWord, PositionOutOfBoundsThrows) {
     EXPECT_THROW(w.setBit(3, 1), std::out_of_range);
     EXPECT_THROW(w.getBit(-1), std::out_of_range);
     EXPECT_THROW(w.getBit(3), std::out_of_range);
+
+    EXPECT_THROW(w[-1], std::out_of_range);
+    EXPECT_THROW(w[3], std::out_of_range);
 }
 
 TEST(BinaryCodeWord, CopyConstructor) {

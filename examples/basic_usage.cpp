@@ -4,15 +4,19 @@
 int main() {
     BinaryCodeWord a(8);
     BinaryCodeWord b(8);
-
+    BinaryCodeWord aa(8);
     a.setBit(0, 1);
     a.setBit(3, 1);
+    aa[0] = 1;
+    aa[3] = 1;
 
     b.setBit(3, 1);
     b.setBit(4, 1);
 
     std::cout << "Codeword a : "<<a<<std::endl;
     std::cout << "Codeword a Hamming weight : "<<a.weight()<<std::endl;
+    std::cout << "Codeword aa : "<<aa<<std::endl;
+    std::cout << "Codeword aa Hamming weight : "<<aa.weight()<<std::endl;
     std::cout << "Codeword b : "<<b<<std::endl;
     std::cout << "Codeword b Hamming weight : "<<b.weight()<<std::endl;
     BinaryCodeWord c = a + b;   // XOR
@@ -23,6 +27,12 @@ int main() {
     std::cout << "c bits: ";
     for (int i = 0; i < c.length(); ++i) std::cout << c.getBit(i);
     std::cout << "\n";
+
+    std::cout << "b bits: ";
+    for (int i = 0; i < b.length(); ++i) std::cout << b[i];
+    std::cout << "\n";
+
+    std::cout << "Dot product a * b: " << (a * b) << "\n";
 
     std::cout << "a == c? " << (a == c ? "true" : "false") << "\n";
     return 0;
